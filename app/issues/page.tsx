@@ -1,10 +1,13 @@
-import { Button } from '@radix-ui/themes'
+'use client';
+import { Button, TextArea, TextField } from '@radix-ui/themes'
 import React from 'react'
 
 const IssuesPage = () => {
   return (
-    <div>
-      <Button>New Issue</Button>
+    <div className='max-w-xl space-y-3'>
+      <TextField.Root placeholder='Title' onChange={(e) => console.log(e.target.value)} />
+      <TextArea placeholder='Description' />
+      <Button>Submit new Issue</Button>
     </div>
   )
 }
