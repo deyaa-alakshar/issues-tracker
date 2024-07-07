@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createIssueSchema } from '@/app/validationSchema';
 import { z } from 'zod';
 import ErrorMessage from '@/app/components/errorMessage';
+import Spinner from '@/app/components/Spinner';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -17,8 +18,10 @@ const NewIssue = () => {
   const {register, control, handleSubmit, formState: {errors}} = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema)
   });
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const [error, setError] = useState('');
+  const [isSubmiting, setIsSubmiting] = useState(false);
+  const router = useRouter();
+
   return (
     <div className='max-w-xl'>
         {error && (<Callout.Root color='red' className='mb-5'>
@@ -26,10 +29,13 @@ const NewIssue = () => {
         </Callout.Root>)}
         <form onSubmit={handleSubmit(async (data) =>{
             try {
+              setIsSubmiting(true);
                 await axios.post("/api/issues", data);
-                router.push("/issues")
+                router.push("/issues");
+                setIsSubmiting(false);
             } catch (error) {
-                setError("An unexpected error occurrd")
+                setError("An unexpected error occurrd");
+                setIsSubmiting(false);
             }
 
             })} className=' space-y-3'>
@@ -41,7 +47,7 @@ const NewIssue = () => {
                 render={({field}) => <SimpleMdeReact placeholder='Description' {...field} />}
             />
             <ErrorMessage>{errors.description?.message}</ErrorMessage>
-            <Button type='submit'>Submit new Issue</Button>
+            <Button disabled={isSubmiting} type='submit'>Submit new Issue {isSubmiting && <Spinner />}</Button>
         </form>
     </div>
   )
