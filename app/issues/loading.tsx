@@ -1,22 +1,12 @@
 import { Button, Table } from "@radix-ui/themes";
-import axios from "axios";
 import Link from "next/link";
-import IssueStatusBadge from "../components/issueStatusBadge";
-import { Status } from "@prisma/client";
-import delay from 'delay'
+import React from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import IssuesActions from "./issuesActions";
 
-interface Issues {
-  id: number;
-  title: string;
-  status: Status;
-  createdAt: Date;
-}
-
-const IssuesPage = async () => {
-  const issues = await axios.get("http://localhost:3000/api/issues");
-  await delay(2000)
-
+const Loading = () => {
+  const issues = [1, 2, 3, 4, 5];
   return (
     <div>
       <IssuesActions />
@@ -29,20 +19,20 @@ const IssuesPage = async () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {issues.data.map((issue: Issues) => (
-            <Table.Row key={issue.id}>
+          {issues.map((issue: number) => (
+            <Table.Row key={issue}>
               <Table.Cell>
-                {issue.title}{" "}
+                <Skeleton />
                 <div className="block md:hidden">
-                  <p>{issue.status}</p>
-                  <p>{new Date(issue.createdAt).toDateString()}</p>
+                  <Skeleton />
+                  <Skeleton />
                 </div>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                <IssueStatusBadge status={issue.status} />
+                <Skeleton />{" "}
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {new Date(issue.createdAt).toDateString()}
+                <Skeleton />{" "}
               </Table.Cell>
             </Table.Row>
           ))}
@@ -52,4 +42,4 @@ const IssuesPage = async () => {
   );
 };
 
-export default IssuesPage;
+export default Loading;
