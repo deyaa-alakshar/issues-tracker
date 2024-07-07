@@ -1,11 +1,13 @@
 import { Button, Table } from "@radix-ui/themes";
 import axios from "axios";
 import Link from "next/link";
+import IssueStatusBadge from "../components/issueStatusBadge";
+import { Status } from "@prisma/client";
 
 interface Issues {
   id: number;
   title: string;
-  status: string;
+  status: Status;
   createdAt: Date;
 }
 
@@ -38,7 +40,7 @@ const IssuesPage = async () => {
                 </div>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {issue.status}
+                <IssueStatusBadge status={issue.status} />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
                 {new Date(issue.createdAt).toDateString()}
