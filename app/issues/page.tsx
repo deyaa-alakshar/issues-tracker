@@ -1,10 +1,9 @@
-import { Button, Table } from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
 import axios from "axios";
-import IssueStatusBadge from "../components/issueStatusBadge";
 import { Status } from "@prisma/client";
 import delay from "delay";
 import IssuesActions from "./issuesActions";
-import Link from "next/link";
+import { IssueStatusBadge, Link } from "../components";
 
 interface Issues {
   id: number;
@@ -32,13 +31,11 @@ const IssuesPage = async () => {
           {issues.data.map((issue: Issues) => (
             <Table.Row key={issue.id}>
               <Table.Cell>
-                <Link href={`/issues/${issue.id}`}>
-                  {issue.title}{" "}
-                  <div className="block md:hidden">
-                    <p>{issue.status}</p>
-                    <p>{new Date(issue.createdAt).toDateString()}</p>
-                  </div>
-                </Link>
+                <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+                <div className="block md:hidden">
+                  <p>{issue.status}</p>
+                  <p>{new Date(issue.createdAt).toDateString()}</p>
+                </div>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
                 <IssueStatusBadge status={issue.status} />
