@@ -3,6 +3,7 @@ import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import axios from "axios";
 import { notFound } from "next/navigation";
 import React from "react";
+import Markdown from "react-markdown";
 
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   const issue = await axios.get(
@@ -20,8 +21,8 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
         <IssueStatusBadge status={issue.data.status} />
         <Text>{issue.data.createdAt}</Text>
       </Flex>
-      <Card>
-        <p>{issue.data.description}</p>
+      <Card className="prose">
+        <Markdown>{issue.data.description}</Markdown>
       </Card>
     </div>
   );
