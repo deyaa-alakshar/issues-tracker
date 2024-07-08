@@ -1,3 +1,5 @@
+import IssueStatusBadge from "@/app/components/issueStatusBadge";
+import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import axios from "axios";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -13,10 +15,14 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-      <p>{issue.data.title}</p>
-      <p>{issue.data.description}</p>
-      <p>{issue.data.status}</p>
-      <p>{issue.data.createdAt}</p>
+      <Heading>{issue.data.title}</Heading>
+      <Flex gap="3" my="2">
+        <IssueStatusBadge status={issue.data.status} />
+        <Text>{issue.data.createdAt}</Text>
+      </Flex>
+      <Card>
+        <p>{issue.data.description}</p>
+      </Card>
     </div>
   );
 };
