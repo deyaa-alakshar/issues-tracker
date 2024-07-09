@@ -1,6 +1,6 @@
 import { Table } from "@radix-ui/themes";
 import React from "react";
-import Skeleton from "../components/Skeleton";
+import Skeleton from "../../components/Skeleton";
 import IssuesActions from "./issuesActions";
 
 const Loading = () => {

@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import IssueFormSkeleton from "../[id]/edit/loading";
+import IssueFormSkeleton from "../edit/[id]/loading";
 
 
 const NewIssue = () => {

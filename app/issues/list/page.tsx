@@ -3,7 +3,7 @@ import axios from "axios";
 import { Status } from "@prisma/client";
 import delay from "delay";
 import IssuesActions from "./issuesActions";
-import { IssueStatusBadge, Link } from "../components";
+import { IssueStatusBadge, Link } from "../../components";
 
 interface Issues {
   id: number;
@@ -31,7 +31,7 @@ const IssuesPage = async () => {
           {issues.data.map((issue: Issues) => (
             <Table.Row key={issue.id}>
               <Table.Cell>
-                <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+                <Link href={`/issues/edit/${issue.id}`}>{issue.title}</Link>
                 <div className="block md:hidden">
                   <p>{issue.status}</p>
                   <p>{new Date(issue.createdAt).toDateString()}</p>
