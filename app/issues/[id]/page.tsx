@@ -6,6 +6,7 @@ import IssueDetails from "./issueDetails";
 import DeleteIssueButton from "./deleteIssueButton";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/authOptions";
+import AssigneeSelect from "./assigneeSelect";
 
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   const issue = await axios.get(
@@ -26,6 +27,7 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
       {session && (
         <Box>
           <Flex gap="4" direction="column">
+            <AssigneeSelect />
             <EditIssueButton issueId={issue.data.id} />
             <DeleteIssueButton issueId={issue.data.id} />
           </Flex>
