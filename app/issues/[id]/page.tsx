@@ -4,11 +4,15 @@ import { notFound } from "next/navigation";
 import EditIssueButton from "./editIssueButton";
 import IssueDetails from "./issueDetails";
 import DeleteIssueButton from "./deleteIssueButton";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   const issue = await axios.get(
     `http://localhost:3000/api/issues/${parseInt(params.id)}`
   );
+
+  const session = await getServerSession(authOptions);
 
   if (!issue.data) notFound();
 
@@ -19,12 +23,14 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
       <Box className="md:col-span-4">
         <IssueDetails issue={issue.data} />
       </Box>
-      <Box>
-        <Flex gap="4" direction="column">
-          <EditIssueButton issueId={issue.data.id} />
-          <DeleteIssueButton issueId={issue.data.id} />
-        </Flex>
-      </Box>
+      {session && (
+        <Box>
+          <Flex gap="4" direction="column">
+            <EditIssueButton issueId={issue.data.id} />
+            <DeleteIssueButton issueId={issue.data.id} />
+          </Flex>
+        </Box>
+      )}
     </Grid>
   );
 };
