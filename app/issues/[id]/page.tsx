@@ -19,6 +19,8 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
 
   if (typeof params.id !== "number") notFound;
 
+
+
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap="5">
       <Box className="md:col-span-4">
