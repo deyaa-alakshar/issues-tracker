@@ -12,8 +12,15 @@ interface Issues {
   createdAt: Date;
 }
 
-const IssuesPage = async () => {
-  const issues = await axios.get("http://localhost:3000/api/issues");
+interface Props {
+  searchParams: { status: Status };
+}
+
+const IssuesPage = async ({ searchParams }: Props) => {
+  const issues = await axios.get(
+    "http://localhost:3000/api/issues?status=" + searchParams.status
+  );
+
   await delay(2000);
 
   return (

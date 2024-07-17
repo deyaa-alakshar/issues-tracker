@@ -1,6 +1,7 @@
 import authOptions from "@/app/auth/authOptions";
 import { issueSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
+import { Issue, Status } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -22,7 +23,20 @@ export async function POST(request: NextRequest){
     return NextResponse.json(newIssue, {status: 200})
 }
 
-export async function GET(){
+export async function GET(request: NextRequest){
+    const url = new URL(request.url)
+    const status = url.searchParams.get("status");
+    if(status){
+        const statuses = Object.values(Status);
+        if(statuses.includes(status as Status)){
+            
+            const issues = await prisma.issue.findMany({where: {status: status as Status}});
+            return NextResponse.json(issues, {status: 200})
+        }else{
+            const issues = await prisma.issue.findMany();
+            return NextResponse.json(issues, {status: 200})
+        }
+    }
     const issues = await prisma.issue.findMany();
     return NextResponse.json(issues, {status: 200})
 }
