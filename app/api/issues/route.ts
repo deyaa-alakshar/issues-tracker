@@ -26,14 +26,20 @@ export async function POST(request: NextRequest){
 export async function GET(request: NextRequest){
     const url = new URL(request.url)
     const status = url.searchParams.get("status");
+
+    const orderBy = url.searchParams.get("orderBy");
+    const orders = ['title', 'status', 'createdAt'];
+
+    const order = orders.includes(orderBy || "") ? {[orderBy!]: 'asc'} : undefined
+
     if(status){
         const statuses = Object.values(Status);
         if(statuses.includes(status as Status)){
             
-            const issues = await prisma.issue.findMany({where: {status: status as Status}});
+            const issues = await prisma.issue.findMany({where: {status: status as Status}, orderBy: order});
             return NextResponse.json(issues, {status: 200})
         }else{
-            const issues = await prisma.issue.findMany();
+            const issues = await prisma.issue.findMany({orderBy: order});
             return NextResponse.json(issues, {status: 200})
         }
     }

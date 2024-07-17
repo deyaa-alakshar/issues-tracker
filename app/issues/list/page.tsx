@@ -20,7 +20,7 @@ interface Props {
 
 const IssuesPage = async ({ searchParams }: Props) => {
   const issues = await axios.get(
-    "http://localhost:3000/api/issues?status=" + searchParams.status
+    `http://localhost:3000/api/issues?status=${searchParams.status}&orderBy=${searchParams.orderBy}` 
   );
 
   const columns: { label: string; value: keyof Issues; className?: string }[] =
