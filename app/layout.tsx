@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 import Navbar from "./navbar";
 import { Container, Theme, ThemePanel } from "@radix-ui/themes";
 import AuthProvider from "./auth/provider";
-import QueryClientProvider from "./queryClientProvider";
+import QueryClientProvider from "./QueryClientProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
