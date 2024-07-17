@@ -6,6 +6,7 @@ import IssuesActions from "./issuesActions";
 import { IssueStatusBadge } from "../../components";
 import Link from "next/link";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
+import Pagination from "../_components/pagination";
 
 interface Issues {
   id: number;
@@ -15,12 +16,17 @@ interface Issues {
 }
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Issue };
+  searchParams: { status: Status; orderBy: keyof Issue; page: string };
 }
 
 const IssuesPage = async ({ searchParams }: Props) => {
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+
   const issues = await axios.get(
-    `http://localhost:3000/api/issues?status=${searchParams.status}&orderBy=${searchParams.orderBy}` 
+    `http://localhost:3000/api/issues?status=${
+      searchParams.status || "all"
+    }&orderBy=${searchParams.orderBy}&page=${page}&pageSize=${pageSize}`
   );
 
   const columns: { label: string; value: keyof Issues; className?: string }[] =
@@ -39,7 +45,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
   return (
     <div>
       <IssuesActions />
-      <Table.Root variant="surface">
+      <Table.Root variant="surface" my="2">
         <Table.Header>
           <Table.Row>
             {columns.map((column) => (
@@ -49,13 +55,15 @@ const IssuesPage = async ({ searchParams }: Props) => {
                 >
                   {column.label}
                 </Link>
-                {column.value === searchParams.orderBy && <ArrowUpIcon className="inline" />}
+                {column.value === searchParams.orderBy && (
+                  <ArrowUpIcon className="inline" />
+                )}
               </Table.Cell>
             ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {issues.data.map((issue: Issues) => (
+          {issues.data.issues.map((issue: Issues) => (
             <Table.Row key={issue.id}>
               <Table.Cell>
                 <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
@@ -74,6 +82,11 @@ const IssuesPage = async ({ searchParams }: Props) => {
           ))}
         </Table.Body>
       </Table.Root>
+      <Pagination
+        pageSize={pageSize}
+        currentPage={page}
+        itemCount={issues.data.issuesCount}
+      />
     </div>
   );
 };

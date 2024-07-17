@@ -29,18 +29,22 @@ export async function GET(request: NextRequest){
 
     const orderBy = url.searchParams.get("orderBy");
     const orders = ['title', 'status', 'createdAt'];
+    const page = parseInt(url.searchParams.get("page")!);
+    const pageSize = parseInt(url.searchParams.get("pageSize")!);
 
-    const order = orders.includes(orderBy || "") ? {[orderBy!]: 'asc'} : undefined
+    const order = orders.includes(orderBy || "") ? {[orderBy!]: 'asc'} : undefined;
+    
 
     if(status){
         const statuses = Object.values(Status);
         if(statuses.includes(status as Status)){
-            
-            const issues = await prisma.issue.findMany({where: {status: status as Status}, orderBy: order});
-            return NextResponse.json(issues, {status: 200})
+            const issues = await prisma.issue.findMany({where: {status: status as Status}, orderBy: order, skip:(page -1) * page, take: pageSize});
+            const issuesCount = await prisma.issue.count({where: {status: status as Status}})
+            return NextResponse.json({issues: issues, issuesCount: issuesCount}, {status: 200})
         }else{
-            const issues = await prisma.issue.findMany({orderBy: order});
-            return NextResponse.json(issues, {status: 200})
+            const issues = await prisma.issue.findMany({orderBy: order, skip:(page -1) * page, take: pageSize});
+            const issuesCount = await prisma.issue.count()
+            return NextResponse.json({issues: issues, issuesCount: issuesCount}, {status: 200})
         }
     }
     const issues = await prisma.issue.findMany();
