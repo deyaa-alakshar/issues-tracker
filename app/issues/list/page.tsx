@@ -1,9 +1,11 @@
 import { Table } from "@radix-ui/themes";
 import axios from "axios";
-import { Status } from "@prisma/client";
+import { Issue, Status } from "@prisma/client";
 import delay from "delay";
 import IssuesActions from "./issuesActions";
-import { IssueStatusBadge, Link } from "../../components";
+import { IssueStatusBadge } from "../../components";
+import Link from "next/link";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
 
 interface Issues {
   id: number;
@@ -13,13 +15,24 @@ interface Issues {
 }
 
 interface Props {
-  searchParams: { status: Status };
+  searchParams: { status: Status; orderBy: keyof Issue };
 }
 
 const IssuesPage = async ({ searchParams }: Props) => {
   const issues = await axios.get(
     "http://localhost:3000/api/issues?status=" + searchParams.status
   );
+
+  const columns: { label: string; value: keyof Issues; className?: string }[] =
+    [
+      { label: "Issue", value: "title" },
+      { label: "Status", value: "status", className: "hidden md:table-cell" },
+      {
+        label: "Created",
+        value: "createdAt",
+        className: "hidden md:table-cell",
+      },
+    ];
 
   await delay(2000);
 
@@ -29,9 +42,16 @@ const IssuesPage = async ({ searchParams }: Props) => {
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.Cell>Issue</Table.Cell>
-            <Table.Cell className="hidden md:table-cell">Status</Table.Cell>
-            <Table.Cell className="hidden md:table-cell">Created</Table.Cell>
+            {columns.map((column) => (
+              <Table.Cell key={column.value} className={column.className}>
+                <Link
+                  href={{ query: { ...searchParams, orderBy: column.value } }}
+                >
+                  {column.label}
+                </Link>
+                {column.value === searchParams.orderBy && <ArrowUpIcon className="inline" />}
+              </Table.Cell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
