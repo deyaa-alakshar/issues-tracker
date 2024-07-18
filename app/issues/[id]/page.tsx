@@ -7,11 +7,14 @@ import DeleteIssueButton from "./deleteIssueButton";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/authOptions";
 import AssigneeSelect from "./assigneeSelect";
+import { cache } from "react";
+
+const fetchIssue = cache((issueId: number) =>
+  axios.get(`http://localhost:3000/api/issues/${issueId}`)
+);
 
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
-  const issue = await axios.get(
-    `http://localhost:3000/api/issues/${parseInt(params.id)}`
-  );
+  const issue = await fetchIssue(parseInt(params.id));
 
   const session = await getServerSession(authOptions);
 
@@ -38,9 +41,7 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
 };
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const issue = await axios.get(
-    `http://localhost:3000/api/issues/${parseInt(params.id)}`
-  );
+  const issue = await fetchIssue(parseInt(params.id));
 
   return {
     title: issue.data?.title,
