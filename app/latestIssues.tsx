@@ -1,32 +1,16 @@
-import { Status, User } from "@prisma/client";
 import { Avatar, Card, Flex, Heading, Table } from "@radix-ui/themes";
-import axios from "axios";
 import Link from "next/link";
 import React from "react";
 import { IssueStatusBadge } from "./components";
+import { Issue } from "./page";
 
-interface Issue {
-  id: number;
-  title: string;
-  description: string;
-  status: Status;
-  createdAt: string;
-  updatedAt: string;
-  assignedToUserId: string;
-  assignedToUser: User | null;
-}
-
-const LatestIssues = async () => {
-  const issues = await axios.get(
-    `http://localhost:3000/api/issues?latest=true`
-  );
-
+const LatestIssues = async ({ issues }: { issues: Issue[] }) => {
   return (
     <Card>
-        <Heading size="2">Latest issues</Heading>
+      <Heading size="2">Latest issues</Heading>
       <Table.Root>
         <Table.Body>
-          {issues.data?.map((issue: Issue) => (
+          {issues.map((issue: Issue) => (
             <Table.Row key={issue.id}>
               <Table.Cell>
                 <Flex justify="between">

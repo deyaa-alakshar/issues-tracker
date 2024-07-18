@@ -28,7 +28,10 @@ export async function GET(request: NextRequest){
 
     if(url.searchParams.get("latest")){
         const issues = await prisma.issue.findMany({orderBy: {createdAt: 'desc'}, take: 5, include: {assignedToUser: true}});
-        return NextResponse.json(issues, {status: 200});
+        const open = await prisma.issue.count({where: {status: 'OPEN'}})
+        const closed = await prisma.issue.count({where: {status: 'CLOSED'}})
+        const inProgress = await prisma.issue.count({where: {status: 'IN_PROGRESS'}})
+        return NextResponse.json({issues: issues, open, closed, inProgress}, {status: 200});
     }
 
 
