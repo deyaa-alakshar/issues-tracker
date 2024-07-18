@@ -19,8 +19,6 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
 
   if (typeof params.id !== "number") notFound;
 
-
-
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap="5">
       <Box className="md:col-span-4">
@@ -38,5 +36,16 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
     </Grid>
   );
 };
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const issue = await axios.get(
+    `http://localhost:3000/api/issues/${parseInt(params.id)}`
+  );
+
+  return {
+    title: issue.data?.title,
+    description: issue?.data.description,
+  };
+}
 
 export default IssueDetailPage;

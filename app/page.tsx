@@ -4,6 +4,7 @@ import { Status, User } from "@prisma/client";
 import IssueSummery from "./issueSummery";
 import { Flex, Grid } from "@radix-ui/themes";
 import IssueChart from "./issueChart";
+import { Metadata } from "next";
 
 export interface Issue {
   id: number;
@@ -38,3 +39,8 @@ export default async function Home() {
     </Grid>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Issue tracker - Dashboard",
+  description: "View a summary of project issues",
+};
