@@ -5,7 +5,7 @@ import IssueStatusFilter from "./issueStatusFilter";
 
 const IssuesActions = () => {
   return (
-    <Flex justify="between">
+    <Flex mb="2" justify="between">
       <IssueStatusFilter />
       <Button>
         <Link href="/issues/new">New Issue</Link>

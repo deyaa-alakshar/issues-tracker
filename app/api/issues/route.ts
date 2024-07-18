@@ -25,8 +25,14 @@ export async function POST(request: NextRequest){
 
 export async function GET(request: NextRequest){
     const url = new URL(request.url)
-    const status = url.searchParams.get("status");
 
+    if(url.searchParams.get("latest")){
+        const issues = await prisma.issue.findMany({orderBy: {createdAt: 'desc'}, take: 5, include: {assignedToUser: true}});
+        return NextResponse.json(issues, {status: 200});
+    }
+
+
+    const status = url.searchParams.get("status");
     const orderBy = url.searchParams.get("orderBy");
     const orders = ['title', 'status', 'createdAt'];
     const page = parseInt(url.searchParams.get("page")!);

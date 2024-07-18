@@ -1,3 +1,10 @@
+import LatestIssues from "./latestIssues";
+
 export default function Home() {
-  return <div> hello world</div>;
+  return (
+    <div>
+      {" "}
+      <LatestIssues />
+    </div>
+  );
 }
