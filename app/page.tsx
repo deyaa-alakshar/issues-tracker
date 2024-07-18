@@ -3,6 +3,7 @@ import LatestIssues from "./latestIssues";
 import { Status, User } from "@prisma/client";
 import IssueSummery from "./issueSummery";
 import { Flex } from "@radix-ui/themes";
+import IssueChart from "./issueChart";
 
 export interface Issue {
   id: number;
@@ -27,6 +28,11 @@ export default async function Home() {
         inProgress={data.inProgress}
       />
       <LatestIssues issues={data.issues} />
-    </Flex >
+      <IssueChart
+        open={data.open}
+        closed={data.closed}
+        inProgress={data.inProgress}
+      />
+    </Flex>
   );
 }
